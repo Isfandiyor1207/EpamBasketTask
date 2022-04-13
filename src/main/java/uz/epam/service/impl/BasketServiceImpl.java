@@ -38,7 +38,7 @@ public class BasketServiceImpl implements BasketService {
 
         List<Ball> ballList = new ArrayList<>();
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 15; i++) {
             Ball ball = ballService.createBall();
             ballList.add(ball);
         }
