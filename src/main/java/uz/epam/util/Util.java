@@ -1,6 +1,6 @@
 package uz.epam.util;
 
-import uz.epam.enums.Colour;
+import uz.epam.type.Colour;
 
 import java.util.Random;
 

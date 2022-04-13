@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface FileService {
 
-    String createFile();
+    boolean createFile();
 
     void writeToFile();
 

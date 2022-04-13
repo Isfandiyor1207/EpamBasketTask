@@ -1,7 +1,7 @@
 package uz.epam.service;
 
 import uz.epam.domain.Ball;
-import uz.epam.enums.Colour;
+import uz.epam.type.Colour;
 
 import java.util.List;
 

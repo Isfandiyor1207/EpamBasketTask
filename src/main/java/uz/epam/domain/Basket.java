@@ -33,7 +33,12 @@ public class Basket {
 
     @Override
     public int hashCode() {
-        return Objects.hash(ballList);
+
+        int hash=7;
+
+        hash=31*hash + (ballList == null ? 0 : ballList.hashCode());
+
+        return hash;
     }
 
     @Override

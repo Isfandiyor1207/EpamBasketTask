@@ -1,8 +1,7 @@
 package uz.epam.domain;
 
-import uz.epam.enums.Colour;
+import uz.epam.type.Colour;
 
-import java.util.Objects;
 import java.util.StringJoiner;
 
 public class Ball {
@@ -64,7 +63,16 @@ public class Ball {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, radius, weight, colour);
+
+        int hash = 7;
+
+        hash = 31 * hash + id;
+        hash = 31 * hash + radius;
+        hash = (int) (31 * hash + weight);
+        hash = 31 * hash + (colour == null ? 0: colour.hashCode());
+
+        return hash;
+
     }
 
     @Override

@@ -5,8 +5,9 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import uz.epam.domain.Ball;
-import uz.epam.enums.Colour;
 import uz.epam.service.FileService;
+import uz.epam.type.Colour;
+import uz.epam.util.Validation;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -21,16 +22,18 @@ public class FileServiceImpl implements FileService {
     private final XSSFWorkbook workbook;
     private final XSSFSheet spreadsheet;
     private XSSFRow row;
+    private final Validation validation;
 
     public FileServiceImpl() {
         this.workbook = new XSSFWorkbook();
         this.spreadsheet = this.workbook.createSheet("Balls");
         this.row = spreadsheet.createRow((short) 0);
+        this.validation = new Validation();
     }
 
 
     @Override
-    public String createFile() {
+    public boolean createFile() {
 
         boolean createdFile = false;
 
@@ -43,16 +46,19 @@ public class FileServiceImpl implements FileService {
             }
             if (createdFile) {
                 createTitleInFile();
-                return "File successfully created.";
-            } else return "The Titles cannot be written.";
-        } else
-            return "File is already exists.";
+                System.out.println("File successfully created.");
+            } else {
+                System.out.println("The Titles cannot be written.");
+            }
+            return true;
+        } else {
+            System.out.println("File is already exists. ");
+            return false;
+        }
     }
 
     @Override
     public void writeToFile() {
-
-        System.out.println(createFile());
 
         BasketServiceImpl basketService = new BasketServiceImpl();
 
@@ -120,10 +126,30 @@ public class FileServiceImpl implements FileService {
                         Cell cell = row.getCell(cellIndex, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
 
                         switch (cell.getColumnIndex()) {
-                            case 0 -> ball.setId((int) cell.getNumericCellValue());
-                            case 1 -> ball.setRadius((int) cell.getNumericCellValue());
-                            case 2 -> ball.setWeight((long) cell.getNumericCellValue());
-                            case 3 -> ball.setColour(Colour.valueOf(cell.getStringCellValue()));
+                            case 0 -> {
+                                Double number = validation.checkNumericDataTypeToValidation(cell, cell.getRowIndex(), 0);
+                                if (number != null) {
+                                    ball.setId(number.intValue());
+                                }
+                            }
+                            case 1 -> {
+                                Double number = validation.checkNumericDataTypeToValidation(cell, cell.getRowIndex(), 1);
+                                if (number != null) {
+                                    ball.setRadius(number.intValue());
+                                }
+                            }
+                            case 2 -> {
+                                Double number = validation.checkNumericDataTypeToValidation(cell, cell.getRowIndex(), 2);
+                                if (number != null) {
+                                    ball.setWeight(number.longValue());
+                                }
+                            }
+                            case 3 -> {
+                                String colour = validation.checkStringDataToValidation(cell, cell.getRowIndex(), 3);
+                                if (colour != null) {
+                                    ball.setColour(Colour.valueOf(colour));
+                                }
+                            }
                         }
                     }
                     ballList.add(ball);
@@ -136,36 +162,4 @@ public class FileServiceImpl implements FileService {
 
         return ballList;
     }
-
 }
-//    @Override
-//    public List<Ball> readFromFile() {
-//
-//        List<Ball> ballList = new ArrayList<>();
-//
-//        Sheet sheet = workbook.getSheetAt(0);
-//
-//        int numberOfRows = sheet.getPhysicalNumberOfRows();
-//
-//        for (int i = 1; i < numberOfRows; i++) {
-//            Ball ball = new Ball();
-//            Row row = sheet.getRow(i);
-//            Iterator<Cell> cellIterator = row.cellIterator();
-//
-//            int indexOfCell = 0;
-//            while (cellIterator.hasNext()) {
-//                Cell cell = cellIterator.next();
-//
-//                switch (indexOfCell) {
-//                    case 0 -> ball.setId((int) cell.getNumericCellValue());
-//                    case 1 -> ball.setRadius((int) cell.getNumericCellValue());
-//                    case 2 -> ball.setWeight((long) cell.getNumericCellValue());
-//                    case 3 -> ball.setColour(Colour.valueOf(cell.getStringCellValue()));
-//                }
-//                indexOfCell++;
-//            }
-//            ballList.add(ball);
-//        }
-//
-//        return ballList;
-//    }

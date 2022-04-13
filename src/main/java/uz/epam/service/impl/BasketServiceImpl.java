@@ -1,7 +1,7 @@
 package uz.epam.service.impl;
 
 import uz.epam.domain.Ball;
-import uz.epam.enums.Colour;
+import uz.epam.type.Colour;
 import uz.epam.service.BasketService;
 
 import java.util.ArrayList;
@@ -45,5 +45,6 @@ public class BasketServiceImpl implements BasketService {
 
         return ballList;
     }
+
 
 }

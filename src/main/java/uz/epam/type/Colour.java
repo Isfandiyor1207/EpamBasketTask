@@ -1,4 +1,4 @@
-package uz.epam.enums;
+package uz.epam.type;
 
 public enum Colour {
 
